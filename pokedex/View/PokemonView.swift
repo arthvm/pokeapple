@@ -1,38 +1,45 @@
 import SwiftUI
 
 struct PokemonView: View {
-    let id: Int
-    let blurColor: Color
-    let imageName: String
-    let pokemonName: String
-    let typeTags: [String]
+    let pokemon: Pokemon
+    @State var pokemonWithData: PokemonWithData?
+    
+    func getData(pokemon: Pokemon) async {
+        do {
+            self.pokemonWithData = try await PokeAPI().getPokemonData(pokemon: pokemon)
+        } catch {
+            
+        }
+    }
     
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text("#\(id)")
+                Text("#\(pokemon.id)")
                     .foregroundStyle(.white.opacity(0.95))
                     .font(.title3)
                     .fontWeight(.semibold)
                     .padding([.bottom], 20)
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
-                        .foregroundStyle(blurColor.opacity(0.8))
+                        .foregroundStyle(getColorFromType(type: pokemon.types[0]).opacity(0.8))
                         .blur(radius: 55.0)
                         .frame(width: geometry.size.width * 0.50,
                                height: geometry.size.width * 0.47)
-                    Image(imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: geometry.size.width * 0.4)
+                    AsyncImage(url: URL(string: pokemonWithData?.data.sprites.front_default ?? "")) { image in
+                        image.resizable().scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                    }
+                    .frame(width: geometry.size.width * 0.4)
                 }
-                Text(pokemonName)
+                Text(pokemon.name.capitalized)
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
                 HStack(spacing: 8) {
-                    ForEach(typeTags, id: \.self) { type in
-                        PokemonTypeTag(name: type)
+                    ForEach(pokemon.types, id: \.self) { type in
+                        TypeLabel(type: type)
                     }
                 }
                 .font(.caption)
@@ -40,7 +47,9 @@ struct PokemonView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.black.opacity(0.95).ignoresSafeArea())
+            .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
+        }.task {
+            await getData(pokemon: pokemon)
         }
     }
 }
@@ -59,5 +68,5 @@ struct PokemonTypeTag: View {
 }
 
 #Preview {
-    PokemonView(id: 130, blurColor: .purple, imageName: "gengar", pokemonName: "Gengar", typeTags: ["Ghost", "Poison", "Gui", "Fodinha"])
+    PokemonView(pokemon: Pokemon(id: 1, name: "bulbasaur", types: [.grass, .poison]))
 }

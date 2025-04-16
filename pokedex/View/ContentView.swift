@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct ContentView: View {    
     @State var pokemons = [Pokemon]()
     @State var searchText: String = ""
     
@@ -20,7 +20,14 @@ struct ContentView: View {
                         ForEach(searchText == "" ? pokemons : pokemons.filter {
                             $0.name.contains(searchText.lowercased())
                         }) { pokemon in
-                            PokemonCard(pokemon: pokemon)
+                            ScrollView {
+                                NavigationLink(destination: {
+                                    PokemonView(pokemon: pokemon)
+                                })
+                                {
+                                    PokemonCard(pokemon: pokemon)
+                                }
+                            }
                         }
                     }
                     .scrollContentBackground(.hidden)
