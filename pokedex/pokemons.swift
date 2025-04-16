@@ -28,13 +28,13 @@ enum ElementType: String {
     case ghost
 }
 
-struct Pokemon {
+struct Pokemon: Identifiable {
     var id: Int
     var name: String
     var types: [ElementType]
 }
 
-let pokemons: [Pokemon] = [
+let pokemonsData: [Pokemon] = [
     Pokemon(id: 1, name: "bulbasaur", types: [.grass, .poison]),
     Pokemon(id: 2, name: "ivysaur", types: [.grass, .poison]),
     Pokemon(id: 3, name: "venusaur", types: [.grass, .poison]),

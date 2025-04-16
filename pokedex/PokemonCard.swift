@@ -1,30 +1,19 @@
 import SwiftUI
 
-struct pokemonCard: View {
+struct PokemonCard: View {
+    var pokemon: Pokemon!
+    
     var body: some View {
-            Grid (horizontalSpacing: 30, verticalSpacing: 30) {
-                GridRow {
                     VStack(alignment: .leading, spacing: 0) {
-                        Text("Bulbasaur")
+                        Text(pokemon.name.capitalized)
                             .fontWeight(.bold)
                             .font(.title2)
                             .foregroundStyle(.white)
                         HStack {
                             VStack(alignment: .leading) {
-                                Text("Grass")
-                                    .foregroundStyle(.white)
-                                    .fontWeight(.medium)
-                                    .padding([.horizontal], 14)
-                                    .padding([.vertical], 6)
-                                    .background(.white.opacity(0.25))
-                                    .cornerRadius(20)
-                                Text("Poison")
-                                    .foregroundStyle(.white)
-                                    .fontWeight(.medium)
-                                    .padding([.horizontal], 14)
-                                    .padding([.vertical], 6)
-                                    .background(.white.opacity(0.25))
-                                    .cornerRadius(20)
+                                ForEach(pokemon.types, id: \.self) {type in
+                                    TypeLabel(type: type)
+                                }
                             }
                             ZStack {
                                 RoundedRectangle(cornerRadius: 40)
@@ -44,19 +33,12 @@ struct pokemonCard: View {
                     .overlay(
                         RoundedRectangle(cornerRadius: 20)
                             .stroke(.green.opacity(0.2), lineWidth: 1)
-                    )
+                    ).preferredColorScheme(.dark)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background {
-                Color.black.opacity(0.95)
-                    .ignoresSafeArea()
-        }
-    }
-}
 
-struct pokemonCard_Previews: PreviewProvider {
+struct PokemonCard_Previews: PreviewProvider {
     static var previews: some View {
-        pokemonCard()
+    PokemonCard(pokemon: Pokemon(id: 5, name: "Bulbasaur", types: [.grass, .poison]))
     }
 }
