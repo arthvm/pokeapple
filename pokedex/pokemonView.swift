@@ -1,32 +1,39 @@
 import SwiftUI
 
 struct PokemonView: View {
+    let id: Int
+    let blurColor: Color
+    let imageName: String
+    let pokemonName: String
+    let typeTags: [String]
+    
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text("#0130")
+                Text("#\(id)")
                     .foregroundStyle(.white.opacity(0.95))
                     .font(.title3)
                     .fontWeight(.semibold)
                     .padding([.bottom], 20)
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
-                        .foregroundStyle(.purple.opacity(0.8))
+                        .foregroundStyle(blurColor.opacity(0.8))
                         .blur(radius: 55.0)
                         .frame(width: geometry.size.width * 0.50,
                                height: geometry.size.width * 0.47)
-                    Image("gengar")
+                    Image(imageName)
                         .resizable()
                         .scaledToFit()
                         .frame(width: geometry.size.width * 0.4)
                 }
-                Text("Gengar")
+                Text(pokemonName)
                     .foregroundStyle(.white)
                     .font(.title)
                     .fontWeight(.bold)
                 HStack(spacing: 8) {
-                    PokemonTypeTag(name: "Ghost")
-                    PokemonTypeTag(name: "Poison")
+                    ForEach(typeTags, id: \.self) { type in
+                        PokemonTypeTag(name: type)
+                    }
                 }
                 .font(.caption)
                 Spacer()
@@ -52,5 +59,5 @@ struct PokemonTypeTag: View {
 }
 
 #Preview {
-    PokemonView()
+    PokemonView(id: 130, blurColor: .purple, imageName: "gengar", pokemonName: "Gengar", typeTags: ["Ghost", "Poison", "Gui", "Fodinha"])
 }
