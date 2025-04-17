@@ -38,7 +38,12 @@ struct PokemonView: View {
                     }
                 }
                 .font(.caption)
-                Text("\(pokemonWithData?.species.form_descriptions[0].description ?? "")")
+                
+                if let entry = pokemonWithData?.species.flavor_text_entries.first(where: { $0.language.name == "en" }) {
+                    Text(entry.flavor_text)
+                } else {
+                    Text("No description available.")
+                }
                 Spacer()
             }
             .padding()

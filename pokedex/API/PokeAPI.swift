@@ -5,8 +5,14 @@ struct PokemonSprites: Codable {
     var back_default: String
 }
 
-struct FormDescriptions: Codable {
-    var description: String
+struct FlavorTextLanguage: Codable {
+    var name: String
+    var url: String
+}
+
+struct TextEntries: Codable {
+    var flavor_text: String
+    var language: FlavorTextLanguage
 }
 
 struct PokemonData: Codable {
@@ -14,7 +20,7 @@ struct PokemonData: Codable {
 }
 
 struct PokemonSpeciesData: Codable {
-    var form_descriptions: [FormDescriptions]
+    var flavor_text_entries: [TextEntries]
 }
 
 struct PokemonWithData {
