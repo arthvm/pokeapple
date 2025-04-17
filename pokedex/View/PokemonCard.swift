@@ -18,30 +18,47 @@ struct PokemonCard: View {
                 .fontWeight(.bold)
                 .font(.title2)
                 .foregroundStyle(.white)
-            HStack {
-                VStack(alignment: .leading) {
-                    ForEach(pokemon.types, id: \.self) {type in
-                        TypeLabel(type: type)
+                .padding(.horizontal, 40)
+            ZStack {
+                GeometryReader { geometry in
+                    HStack {
+                        if pokemon.types.count > 1 {
+                            RoundedRectangle(cornerRadius: 40)
+                                .frame(width: 200, height: 100)
+                                .foregroundStyle(getColorFromType(type: pokemon.types[1]).opacity(0.4))
+                                .blur(radius: 70)
+                        }
+                        Spacer()
+                        RoundedRectangle(cornerRadius: 40)
+                            .frame(width: 180, height: 100)
+                            .foregroundStyle(getColorFromType(type: pokemon.types[0]).opacity(0.7))
+                            .blur(radius: 55)
                     }
+                    .frame(width: geometry.size.width)
                 }
-                ZStack {
-                    RoundedRectangle(cornerRadius: 40)
-                        .frame(width: 100, height: 100)
-                        .foregroundStyle(getColorFromType(type: pokemon.types[0]).opacity(0.8))
-                        .blur(radius: 55)
+                
+                HStack {
+                    VStack(alignment: .leading) {
+                        ForEach(pokemon.types, id: \.self) { type in
+                            TypeLabel(type: type)
+                        }
+                    }
+                    Spacer()
                     AsyncImage(url: URL(string: pokemonWithData?.data.sprites.front_default ?? "")) { image in
                         image.resizable().scaledToFit()
                     } placeholder: {
                         ProgressView()
                     }
-                    .onAppear() {
+                    .onAppear {
                         Task {
                             await getData(pokemon: pokemon)
                         }
                     }
-                    .frame(width: 90)
+                    .frame(width: 100)
                 }
+                .padding(.horizontal, 40)
             }
+            .frame(height: 100)
         }
         .frame(maxWidth: .infinity)
         .padding([.top], 20)

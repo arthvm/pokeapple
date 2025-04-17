@@ -15,11 +15,6 @@ struct PokemonView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                Text("#\(pokemon.id)")
-                    .foregroundStyle(.white.opacity(0.95))
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .padding([.bottom], 20)
                 ZStack {
                     RoundedRectangle(cornerRadius: 40)
                         .foregroundStyle(getColorFromType(type: pokemon.types[0]).opacity(0.8))

@@ -1,13 +1,6 @@
-//
-//  ContentView.swift
-//  pokedex
-//
-//  Created by Aluno Mack on 15/04/25.
-//
-
 import SwiftUI
 
-struct ContentView: View {    
+struct ContentView: View {
     @State var pokemons = [Pokemon]()
     @State var searchText: String = ""
     
@@ -23,6 +16,15 @@ struct ContentView: View {
                             ScrollView {
                                 NavigationLink(destination: {
                                     PokemonView(pokemon: pokemon)
+                                        .navigationBarTitleDisplayMode(.inline)
+                                        .toolbar {
+                                            ToolbarItem(placement: .principal) {
+                                                Text("#\(pokemon.id)")
+                                                    .foregroundStyle(.white.opacity(0.95))
+                                                    .font(.title3)
+                                                    .fontWeight(.semibold)
+                                            }
+                                        }
                                 })
                                 {
                                     PokemonCard(pokemon: pokemon)
@@ -42,7 +44,7 @@ struct ContentView: View {
         }
         .preferredColorScheme(.dark)
     }
-            
+    
 }
 
 #Preview {

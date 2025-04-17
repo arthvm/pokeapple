@@ -12,12 +12,15 @@ struct TypeLabel: View {
     
     var body: some View {
         Text(type.rawValue.capitalized)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 4)
+            .background(getColorFromType(type: type).opacity(0.12))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(getColorFromType(type: type).opacity(0.2), lineWidth: 1)
+            )
+            .clipShape(Capsule())
             .foregroundStyle(.white)
-            .fontWeight(.medium)
-            .padding([.horizontal], 14)
-            .padding([.vertical], 6)
-            .background(.white.opacity(0.25))
-            .cornerRadius(20)
     }
 }
 
