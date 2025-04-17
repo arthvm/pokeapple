@@ -45,5 +45,5 @@ struct PlainGauge: View {
 }
 
 #Preview {
-    PlainGauge(type: .fighting, currentValue: 69, minValue: 0, maxValue: 100)
+    PlainGauge(type: .ice, currentValue: 69, minValue: 0, maxValue: 100)
 }
