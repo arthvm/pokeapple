@@ -1,8 +1,8 @@
 import SwiftUI
 
 struct StatisticsView: View {
-    @State var currentStats: [TypeStat] = []
-    
+    @ObservedObject var pokedex: Pokedex
+
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -11,27 +11,38 @@ struct StatisticsView: View {
                     .fontWeight(.bold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .safeAreaPadding()
-                RoundedGauge(currentValue: 69)
+
+                RoundedGauge(currentValue: Double(self.pokedex.capturedCount))
                     .frame(height: geometry.size.height * 0.30)
-                
-                ScrollView {
-                    VStack(spacing: 20) {
-                        ForEach(currentStats) { stat in
-                            PlainGauge(type: stat.type, currentValue: stat.representation)
+
+                if pokedex.capturedCount > 0 {
+                    ScrollView {
+                        VStack(spacing: 20) {
+                            ForEach(self.pokedex.currentStats) { stat in
+                                PlainGauge(type: stat.type, currentValue: stat.representation)
+                            }
                         }
+                        .padding(.bottom, 90)
+                        .safeAreaPadding()
                     }
-                    .padding(.bottom, 90)
-                    .safeAreaPadding()
+                    .frame(height: geometry.size.height * 0.7)
+                } else {
+                    Text("Nenhum Pokémon capturado ainda.")
+                        .foregroundColor(.gray)
+                        .font(.subheadline)
+                        .padding(.top, 32)
                 }
-                .frame(height: geometry.size.height * 0.7)
             }
         }
-        .task {
-            currentStats = getTypeStats(allPokemons: pokemonsData, capturedPokemons: randomPokemons)
+        .onAppear {
+            pokedex.updateStats()  // Garantir que as estatísticas sejam calculadas quando a view aparecer
+        }
+        .onChange(of: pokedex.myPokedex) { _ in
+            pokedex.updateStats()  // Recalcular apenas quando o Pokedex mudar
         }
     }
 }
 
 #Preview {
-    StatisticsView()
+    StatisticsView(pokedex: Pokedex())
 }

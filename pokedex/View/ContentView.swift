@@ -1,13 +1,16 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var pokedex = Pokedex()
+    
     var body: some View {
         TabView {
-            PokedexView()
+            PokedexView(pokedex: pokedex)
                 .tabItem {
                     Label("Pokedex", systemImage: "globe")
                 }
-            StatisticsView()
+            StatisticsView(pokedex: pokedex)
+                .id(pokedex.capturedCount)
                 .tabItem {
                     Label("Statistics", systemImage: "chart.pie")
                 }

@@ -28,7 +28,7 @@ enum ElementType: String, CaseIterable {
     case ghost
 }
 
-struct Pokemon: Identifiable {
+struct Pokemon: Identifiable, Equatable {
     var id: Int
     var name: String
     var types: [ElementType]

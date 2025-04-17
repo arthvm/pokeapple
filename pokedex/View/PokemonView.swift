@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PokemonView: View {
     let pokemon: Pokemon
+    @ObservedObject var pokedex: Pokedex
     @State var pokemonWithData: PokemonWithData?
     
     func getData(pokemon: Pokemon) async {
@@ -57,6 +58,16 @@ struct PokemonView: View {
                         .padding()
                 }
                 Spacer()
+                Button(action: {
+                    self.pokedex.toggleCaptured(pokemon: pokemon)
+                }) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(self.pokedex.wasCaptured(pokemon: pokemon) ? .blue : .green)
+                        Text("Add to Pokedex")
+                            .foregroundColor(.white)
+                    }
+                }
             }
             .padding()
             .multilineTextAlignment(.center)
@@ -81,5 +92,5 @@ struct PokemonTypeTag: View {
 }
 
 #Preview {
-    PokemonView(pokemon: Pokemon(id: 1, name: "bulbasaur", types: [.grass, .poison]))
+    PokemonView(pokemon: Pokemon(id: 1, name: "bulbasaur", types: [.grass, .poison]), pokedex: Pokedex())
 }

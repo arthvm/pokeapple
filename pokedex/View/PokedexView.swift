@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct PokedexView: View {
-    @State var pokemons = [Pokemon]()
+    @ObservedObject var pokedex: Pokedex
     @State var searchText: String = ""
     
     var body: some View {
@@ -10,12 +10,12 @@ struct PokedexView: View {
             NavigationStack {
                 ZStack {
                     List {
-                        ForEach(searchText == "" ? pokemons : pokemons.filter {
+                        ForEach(searchText == "" ? self.pokedex.allPokemons : self.pokedex.allPokemons.filter {
                             $0.name.contains(searchText.lowercased())
                         }) { pokemon in
                             ScrollView {
                                 NavigationLink(destination: {
-                                    PokemonView(pokemon: pokemon)
+                                    PokemonView(pokemon: pokemon, pokedex: self.pokedex)
                                         .navigationBarTitleDisplayMode(.inline)
                                         .toolbar {
                                             ToolbarItem(placement: .principal) {
@@ -33,9 +33,6 @@ struct PokedexView: View {
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .onAppear {
-                        pokemons = pokemonsData
-                    }
                     .searchable(text: $searchText).listStyle(.plain)
                 }
                 .navigationTitle("Pokedex")
@@ -47,5 +44,5 @@ struct PokedexView: View {
 }
 
 #Preview {
-    PokedexView()
+    PokedexView(pokedex: Pokedex())
 }
