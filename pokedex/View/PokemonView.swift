@@ -40,14 +40,26 @@ struct PokemonView: View {
                 .font(.caption)
                 
                 if let entry = pokemonWithData?.species.flavor_text_entries.first(where: { $0.language.name == "en" }) {
-                    Text(entry.flavor_text)
+                    let cleanText = entry.flavor_text
+                        .replacingOccurrences(of: "\n", with: " ")
+                        .replacingOccurrences(of: "\u{000C}", with: " ")
+
+                    Text(cleanText)
+                        .font(.subheadline)
+                        .foregroundStyle(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding()
                 } else {
                     Text("No description available.")
+                        .font(.subheadline)
+                        .foregroundStyle(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding()
                 }
                 Spacer()
             }
             .padding()
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .multilineTextAlignment(.center)
             .preferredColorScheme(/*@START_MENU_TOKEN@*/.dark/*@END_MENU_TOKEN@*/)
         }.task {
             await getData(pokemon: pokemon)
