@@ -10,7 +10,6 @@ struct ContentView: View {
                     Label("Pokedex", systemImage: "globe")
                 }
             StatisticsView(pokedex: pokedex)
-                .id(pokedex.capturedCount)
                 .tabItem {
                     Label("Statistics", systemImage: "chart.pie")
                 }

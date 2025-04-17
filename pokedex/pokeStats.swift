@@ -20,22 +20,26 @@ class Pokedex: ObservableObject {
     @Published var myPokedex: [Pokemon] = []
     @Published var capturedCount = 0
     @Published var currentStats: [TypeStat] = []
-
-    func wasCaptured(pokemon: Pokemon) -> Bool {
+    
+    init() {
+        self.updateStats()
+    }
+    
+    func wasCaptured (pokemon: Pokemon) -> Bool {
         return self.myPokedex.contains(where: { $0.id == pokemon.id })
     }
-
-    func toggleCaptured(pokemon: Pokemon) {
-        if wasCaptured(pokemon: pokemon) {
-            self.myPokedex.removeAll { $0.id == pokemon.id }
+    
+    func toggleCaptured (pokemon: Pokemon) {
+        if self.wasCaptured(pokemon: pokemon) {
+            self.myPokedex = self.myPokedex.filter({ $0.id != pokemon.id })
         } else {
-            self.myPokedex.append(pokemon)
+            self.myPokedex = self.myPokedex + [pokemon]
         }
-
+        
         capturedCount = self.myPokedex.count
-        self.updateStats()  // Atualiza as estatísticas apenas quando há mudança no Pokedex
+        self.updateStats()
     }
-
+    
     func updateStats() {
         var totalByType: [ElementType: Int] = [:]
         for pokemon in self.allPokemons {
@@ -43,19 +47,21 @@ class Pokedex: ObservableObject {
                 totalByType[type, default: 0] += 1
             }
         }
-
+        
         var capturedByType: [ElementType: Int] = [:]
         for pokemon in self.myPokedex {
             for type in pokemon.types {
                 capturedByType[type, default: 0] += 1
             }
         }
-
+        
         self.currentStats = ElementType.allCases.map { type in
             let total = totalByType[type] ?? 0
             let captured = capturedByType[type] ?? 0
             let percentage = total > 0 ? (Double(captured) / Double(total) * 100) : 0.0
             return TypeStat(type: type, amount: captured, representation: percentage)
         }
+        
+        self.objectWillChange.send()
     }
 }

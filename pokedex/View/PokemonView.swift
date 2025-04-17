@@ -57,14 +57,15 @@ struct PokemonView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding()
                 }
-                Spacer()
                 Button(action: {
                     self.pokedex.toggleCaptured(pokemon: pokemon)
                 }) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 20)
                             .fill(self.pokedex.wasCaptured(pokemon: pokemon) ? .blue : .green)
-                        Text("Add to Pokedex")
+                            .frame(width: geometry.size.width * 0.5, height: 50)
+                        Text(self.pokedex.wasCaptured(pokemon: pokemon) ? "Release" : "Capture")
+                            .fontWeight(.semibold)
                             .foregroundColor(.white)
                     }
                 }

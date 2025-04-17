@@ -2,9 +2,11 @@ import SwiftUI
 
 struct PlainGauge: View {
     var type: ElementType
-    @State var currentValue: Double
+    var currentValue: Double
     @State var minValue: Double = 0
     @State var maxValue: Double = 100
+    @State var showValue: Double = 0
+    
     
     var body: some View {
         HStack(spacing: 24) {
@@ -15,7 +17,7 @@ struct PlainGauge: View {
                 .frame(width: 80, alignment: .leading)
 
             HStack(spacing: 5) {
-                Text("\(Int(currentValue))")
+                Text("\(Int(showValue))")
                     .contentTransition(.numericText())
                     .font(.title3)
                     .fontWeight(.bold)
@@ -26,7 +28,7 @@ struct PlainGauge: View {
                     .foregroundStyle(.gray)
             }
             
-            Gauge(value: currentValue, in: minValue...maxValue) {}
+            Gauge(value: Double(showValue), in: minValue...maxValue) {}
                 .tint(Gradient(colors: [
                     getColorFromType(type: type).opacity(0.55),
                     getColorFromType(type: type)
@@ -34,12 +36,11 @@ struct PlainGauge: View {
         }
         .preferredColorScheme(.dark)
         .onAppear {
-            let targetValue = currentValue
-            currentValue = 0
+            showValue = 0
             Task {
                 for i in 0...100 {
                     withAnimation(.spring) {
-                        currentValue = Double(i) / 100 * targetValue
+                        showValue = Double(i) / 100 * currentValue
                     }
                     try await Task.sleep(for: .milliseconds(10))
                 }
@@ -49,5 +50,5 @@ struct PlainGauge: View {
 }
 
 #Preview {
-    PlainGauge(type: .ice, currentValue: 69, minValue: 0, maxValue: 100)
+    PlainGauge(type: .ice, currentValue: 69.0, minValue: 0, maxValue: 100)
 }
