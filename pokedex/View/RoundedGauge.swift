@@ -8,18 +8,16 @@ struct RoundedGauge: View {
     
     var body: some View {
         Gauge(value: currentValue, in: minValue...maxValue) {
-            Text("My Pokemons")
+            Text("\(Int(maxValue))")
+                .fontWeight(.semibold)
+                .foregroundStyle(.gray)
         }currentValueLabel: {
             Text("\(Int(currentValue))")
                 .contentTransition(.numericText())
-        } minimumValueLabel: {
-            Text("\(Int(minValue))")
-        } maximumValueLabel: {
-            Text("\(Int(maxValue))")
         }
         .gaugeStyle(.accessoryCircular)
-        .preferredColorScheme(.dark)
-        .scaleEffect(1.6)
+        .tint(Gradient(stops: [.init(color: .black, location: 0), .init(color: .white, location: 0.1), .init(color: .red, location: 0.5)]))
+        .scaleEffect(2.3)
         .onAppear {
             let targetValue = currentValue
             currentValue = 0

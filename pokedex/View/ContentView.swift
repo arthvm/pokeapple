@@ -7,12 +7,11 @@ struct ContentView: View {
                 .tabItem {
                     Label("Pokedex", systemImage: "globe")
                 }
-            
             StatisticsView()
                 .tabItem {
                     Label("Statistics", systemImage: "chart.pie")
                 }
-        }
+        }.tint(.red)
     }
 }
 

@@ -38,6 +38,7 @@ struct PokemonView: View {
                     }
                 }
                 .font(.caption)
+                Text("\(pokemonWithData?.species.form_descriptions[0].description ?? "")")
                 Spacer()
             }
             .padding()

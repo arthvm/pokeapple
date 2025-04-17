@@ -7,24 +7,34 @@
 
 import Foundation
 
-struct TypeStat {
+struct TypeStat: Identifiable {
     var type: ElementType
     var amount: Int
     var representation: Double
+    
+    var id: ElementType { type }
 }
 
-func getTypeStats(pokemons: [Pokemon]) -> [TypeStat] {
-    var typeCount: [ElementType: Int] = [:]
-    
-    for pokemon in pokemons {
+func getTypeStats(allPokemons: [Pokemon], capturedPokemons: [Pokemon]) -> [TypeStat] {
+    var totalByType: [ElementType: Int] = [:]
+    for pokemon in allPokemons {
         for type in pokemon.types {
-            typeCount[type, default: 0] += 1
+            totalByType[type, default: 0] += 1
         }
     }
     
-    return typeCount.map { (type, count) in
-        let percentage = Double(count) / Double(pokemons.count) * 100
-        
-        return TypeStat(type: type, amount: count, representation: percentage)
+    var capturedByType: [ElementType: Int] = [:]
+    for pokemon in capturedPokemons {
+        for type in pokemon.types {
+            capturedByType[type, default: 0] += 1
+        }
+    }
+    
+    return ElementType.allCases.map { type in
+        let total = totalByType[type] ?? 0
+        let captured = capturedByType[type] ?? 0
+        let percentage = total > 0 ? (Double(captured) / Double(total) * 100) : 0.0
+        return TypeStat(type: type, amount: captured, representation: percentage)
     }
 }
+
