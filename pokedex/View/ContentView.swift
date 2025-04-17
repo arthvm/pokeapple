@@ -5,12 +5,12 @@ struct ContentView: View {
         TabView {
             PokedexView()
                 .tabItem {
-                    Label("Pokedex", systemImage: "list.bullet.rectangle")
+                    Label("Pokedex", systemImage: "globe")
                 }
             
             StatisticsView()
                 .tabItem {
-                    Label("Statistics", systemImage: "chart.line.uptrend.xyaxis.circle")
+                    Label("Statistics", systemImage: "chart.pie")
                 }
         }
     }
